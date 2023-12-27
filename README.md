@@ -1,6 +1,6 @@
 # vggi_labs
-VISUALIZATION OF GRAPHICAL AND GEOMETRIC INFORMATION Lab 2
+VISUALIZATION OF GRAPHICAL AND GEOMETRIC INFORMATION Lab 3
 
 
-![PA2 example](./gifs/pa2_example.gif)
-# PA2 example
+![PA3 example](./gifs/pa3_example.gif)
+# PA3 example

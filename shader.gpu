@@ -25,10 +25,10 @@ const fragmentShaderSource = `
 varying vec3 normalVarying;
 varying vec3 vertexVarying;
 uniform vec4 color;
-
+uniform vec4 light;
 void main() {
     vec3 N = normalize(normalVarying);
-    vec3 L = normalize(vec3(1.0));
+    vec3 L = normalize(light.xyz);
     // Lambert's cosine law
     float lambertian = max(dot(N, L), 0.0);
     float specular = 0.0;
@@ -45,5 +45,7 @@ void main() {
                         lambertian * diffuse +
                         specular * vec3(1.0));
     gl_FragColor = vec4(c,1.0);
-    
+    if(light.w<0.5){
+        gl_FragColor = vec4(1.0);
+    }
 }`;

@@ -1,7 +1,7 @@
 'use strict';
 
 let gl;                         // The webgl context.
-let surface;                    // A surface model
+let surface, line;                    // A surface model
 let shProgram;                  // A shader program
 let spaceball;                  // A SimpleRotator object that lets the user rotate the view by mouse.
 
@@ -41,7 +41,12 @@ function Model(name) {
         gl.drawArrays(gl.TRIANGLES, 0, this.count);
     }
 
-    
+    this.DisplayLight = function(){
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.iVertexBuffer);
+        gl.vertexAttribPointer(shProgram.iAttribVertex, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(shProgram.iAttribVertex);
+        gl.drawArrays(gl.LINE_STRIP, 0, this.count);
+    }
 }
 
 
@@ -100,18 +105,13 @@ function draw() {
 
     let color = hexToRgb(document.getElementById("color").value)
     gl.uniform4fv(shProgram.iColor, [color.r / 255.0, color.g / 255.0, color.b / 255.0, 1]);
-    
+    gl.uniform4fv(shProgram.iLight, [Math.sin(Date.now() * 0.001), 1, 0, 1.0]);
 
     surface.Draw();
-    
-    
-    line.DisplayLight()
-    gl.uniform4fv(shProgram.iLight, [1, 1, 1, 1]);
-}
-
-function draw_() {
-    draw()
-    window.requestAnimationFrame(draw_)
+    line.BufferData([0, 0, 0, ...m4.normalize([Math.sin(Date.now() * 0.001), 1, 0])])
+    gl.uniform4fv(shProgram.iLight, [Math.sin(Date.now() * 0.001), 1, 0, 0.0]);
+    gl.uniformMatrix4fv(shProgram.iModelViewProjectionMatrix, false, m4.multiply(modelViewProjection,m4.translation(1,1,0)));
+    line.DisplayLight();
 }
 
 function hexToRgb(hex) {
@@ -123,8 +123,12 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function CreateSurfaceData()
-{
+function draw_() {
+    draw()
+    window.requestAnimationFrame(draw_)
+}
+
+function CreateSurfaceData() {
     let vertexList = [];
 
     // for (let i=0; i<360; i+=5) {
@@ -207,7 +211,9 @@ function initGL() {
     surface = new Model('Surface');
     surface.BufferData(CreateSurfaceData());
     surface.NormalBufferData(CreateSurfaceNormals());
-    
+
+    line = new Model()
+    line.BufferData([0, 0, 0, 1, 1, 1])
 
     gl.enable(gl.DEPTH_TEST);
 }
