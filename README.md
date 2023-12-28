@@ -1,6 +1,6 @@
 # vggi_labs
-VISUALIZATION OF GRAPHICAL AND GEOMETRIC INFORMATION. Calculation and graphics work
+VISUALIZATION OF GRAPHICAL AND GEOMETRIC INFORMATION Lab 3
 
 
-![CGW example](./images/cgw_example.png)
-# CGW example
+![PA3 example](./gifs/pa3_example.gif)
+# PA3 example
